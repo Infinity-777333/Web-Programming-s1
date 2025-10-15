@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Bulb ON/OFF</title>
+<body>
+<h1>Bulb</h1>
+ <button id="btnon" style="background-color:green; padding:10px;">ON</button>
+ <button id="btnoff" style="background-color:red;padding:10px;">OFF</button>
+ <img id="light" src="lightoff.jpg" width="500px";height="500px">
+   
+   <script>
+   document.getElementById('btnon').addEventListener('click',function()
+   {
+    document.getElementById('light').src="lighton.jpg";
+    document.getElementById('light').style.width="500px";height="500px";
+    });
+    
+    document.getElementById('btnoff').addEventListener('click',function()
+   {
+    document.getElementById('light').src="lightoff.jpg";
+    });
+  </script>  
+ </body>
+ </html>
+ 

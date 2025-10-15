@@ -1,0 +1,15 @@
+* {
+background-color: lightgreen;
+} p {
+text-align: center;
+color: green;
+font-size:25px;
+font-family:monospace;
+}
+#para1 {
+text-align: center; color: red;
+}
+.center { color: brown;
+}
+p:hover { color: hotpink;
+}
