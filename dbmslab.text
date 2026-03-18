@@ -1,0 +1,644 @@
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.42-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| company            |
+| hospital           |
+| industry           |
+| information_schema |
+| mysql              |
+| organization       |
+| performance_schema |
+| sys                |
++--------------------+
+9 rows in set (0.03 sec)
+
+mysql> use hospital;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++--------------------+
+| Tables_in_hospital |
++--------------------+
+| nurse              |
+| physican           |
+| specialization     |
++--------------------+
+3 rows in set (0.00 sec)
+
+mysql> create table ward(ward_no int,ward_name varchar(30),no_of_beds int,nurse_id varchar(10),phone_no int,foreign key(nurse_id) references nurse(nurse_id));
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'ward_ibfk_1' in the referenced table 'nurse'
+mysql> desc nurse;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| nurse_id    | varchar(30) | YES  |     | NULL    |       |
+| nurse_fname | varchar(30) | YES  |     | NULL    |       |
+| nurse_lname | varchar(30) | YES  |     | NULL    |       |
+| shift       | varchar(30) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table nurse add primary key(nurse_id);
+Query OK, 0 rows affected (1.65 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create table ward(ward_no int,ward_name varchar(30),no_of_beds int,nurse_id varchar(10),phone_no int,foreign key(nurse_id) references nurse(nurse_id));
+Query OK, 0 rows affected (0.88 sec)
+
+mysql> alter table ward add primary key(ward_no);
+Query OK, 0 rows affected (1.42 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> craete table patient(pat_id varchar(10) primary key,pat_fname varchar(30),pat_lname varchar(30),age int,phy_id varchar(10),ward_no int,admit_date date,foreign key(phy_id)references physican(phy_id),foreign key(ward_no)references ward(ward_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'craete table patient(pat_id varchar(10) primary key,pat_fname varchar(30),pat_ln' at line 1
+mysql> create table patient(pat_id varchar(10) primary key,pat_fname varchar(30),pat_lname varchar(30),age int,phy_id varchar(10),ward_no int,admit_date date,foreign key(phy_id)references physican(phy_id),foreign key(ward_no)references ward(ward_no));
+Query OK, 0 rows affected (1.53 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_hospital |
++--------------------+
+| nurse              |
+| patient            |
+| physican           |
+| specialization     |
+| ward               |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> desc ward;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| ward_no    | int         | NO   | PRI | NULL    |       |
+| ward_name  | varchar(30) | YES  |     | NULL    |       |
+| no_of_beds | int         | YES  |     | NULL    |       |
+| nurse_id   | varchar(10) | YES  | MUL | NULL    |       |
+| phone_no   | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc patient;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| pat_id     | varchar(10) | NO   | PRI | NULL    |       |
+| pat_fname  | varchar(30) | YES  |     | NULL    |       |
+| pat_lname  | varchar(30) | YES  |     | NULL    |       |
+| age        | int         | YES  |     | NULL    |       |
+| phy_id     | varchar(10) | YES  | MUL | NULL    |       |
+| ward_no    | int         | YES  | MUL | NULL    |       |
+| admit_date | date        | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO Physician_Speciality VALUES
+    -> ('P01','Cardiology'),
+    -> ('P02','Neurology'),
+    -> ('P03','Orthopedics'),
+    -> ('P04','ENT'),
+    -> ('P05','Dermatology');
+ERROR 1146 (42S02): Table 'hospital.Physician_Speciality' doesn't exist
+mysql> INSERT INTO Physician VALUES
+    -> ('P01','Sreekumar','Nair','Trivandrum',60000,'MD'),
+    -> ('P02','Anil','Kumar','Kollam',45000,'MBBS'),
+    -> ('P03','Divya','Menon','Kochi',70000,'MD'),
+    -> ('P04','Rahul','Das','Calicut',52000,'MS'),
+    -> ('P05','Deepa','Ravi','Thrissur',48000,'MBBS');
+ERROR 1146 (42S02): Table 'hospital.Physician' doesn't exist
+mysql> INSERT INTO physician VALUES ('P01','Sreekumar','Nair','Trivandrum',60000,'MD'), ('P02','Anil','Kumar','Kollam',45000,'MBBS'), ('P03','Divya','Menon','Kochi',70000,'MD'), ('P04','Rahul','Das','Calicut',52000,'MS'), ('P05','Deepa','Ravi','Thrissur',48000,'MBBS');
+ERROR 1146 (42S02): Table 'hospital.physician' doesn't exist
+mysql> alter table physican rename physician;
+Query OK, 0 rows affected (0.66 sec)
+
+mysql> INSERT INTO physician VALUES ('P01','Sreekumar','Nair','Trivandrum',60000,'MD'), ('P02','Anil','Kumar','Kollam',45000,'MBBS'), ('P03','Divya','Menon','Kochi',70000,'MD'), ('P04','Rahul','Das','Calicut',52000,'MS'), ('P05','Deepa','Ravi','Thrissur',48000,'MBBS');
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Physician_Speciality VALUES
+    -> ('P01','Cardiology'),
+    -> ('P02','Neurology'),
+    -> ('P03','Orthopedics'),
+    -> ('P04','ENT'),
+    -> ('P05','Dermatology');
+ERROR 1146 (42S02): Table 'hospital.Physician_Speciality' doesn't exist
+mysql> INSERT INTO specialization VALUES ('P01','Cardiology'), ('P02','Neurology
+'), ('P03','Orthopedics'), ('P04','ENT'), ('P05','Dermatology');
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Nurse VALUES
+    -> ('N01','Arya','S','Day'),
+    -> ('N02','Meera','K','Night'),
+    -> ('N03','Lakshmi','P','Day'),
+    -> ('N04','Riya','M','Night');
+ERROR 1146 (42S02): Table 'hospital.Nurse' doesn't exist
+mysql> INSERT INTO nurse VALUES ('N01','Arya','S','Day'), ('N02','Meera','K','Night'), ('N03','Lakshmi','P','Day'), ('N04','Riya','M','Night');
+Query OK, 4 rows affected (0.09 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Ward VALUES
+    -> (101,'General',30,'N01','9876543210'),
+    -> (102,'ICU',10,'N02','9876543211'),
+    -> (103,'Cardio',25,'N03','9876543212'),
+    -> (104,'Neuro',20,'N04','9876543213');
+ERROR 1146 (42S02): Table 'hospital.Ward' doesn't exist
+mysql> INSERT INTO ward VALUES (101,'General',30,'N01','9876543210'), (102,'ICU',10,'N02','9876543211'), (103,'Cardio',25,'N03','9876543212'), (104,'Neuro',20,'N04','9876543213');
+ERROR 1264 (22003): Out of range value for column 'phone_no' at row 1
+mysql> INSERT INTO ward VALUES (101,'General',30,'N01',9876543210), (102,'ICU',10,'N02',9876543211), (103,'Cardio',25,'N03',9876543212), (104,'Neuro',20,'N04',9876543213);
+ERROR 1264 (22003): Out of range value for column 'phone_no' at row 1
+mysql> alter table ward modify phone_no bigint;
+Query OK, 0 rows affected (1.77 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO ward VALUES (101,'General',30,'N01',9876543210), (102,'ICU',10,'N02',9876543211), (103,'Cardio',25,'N03',9876543212), (104,'Neuro',20,'N04',9876543213);
+Query OK, 4 rows affected (0.13 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Patient VALUES
+    -> ('PT01','Dinesh','Kumar',65,'P01',103,'2026-03-01'),
+    -> ('PT02','Arun','Raj',45,'P02',104,'2026-03-05'),
+    -> ('PT03','Divya','S',30,'P03',101,'2026-03-07'),
+    -> ('PT04','Deepak','Mohan',70,'P01',103,'2026-03-10'),
+    -> ('PT05','Ravi','K',55,'P04',102,'2026-03-12'),
+    -> ('PT06','Devika','Nair',28,'P05',101,'2026-03-15');
+ERROR 1146 (42S02): Table 'hospital.Patient' doesn't exist
+mysql> INSERT INTO patient VALUES ('PT01','Dinesh','Kumar',65,'P01',103,'2026-03-01'), ('PT02','Arun','Raj',45,'P02',104,'2026-03-05'), ('PT03','Divya','S',30,'P03',101,'2026-03-07'), ('PT04','Deepak','Mohan',70,'P01',103,'2026-03-10'), ('PT05','Ravi','K',55,'P04',102,'2026-03-12'), ('PT06','Devika','Nair',28,'P05',101,'2026-03-15');
+Query OK, 6 rows affected (0.12 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from physician;
++--------+-----------+-----------+------------+--------+--------+
+| phy_id | phy_fname | phy_lname | address    | salary | degree |
++--------+-----------+-----------+------------+--------+--------+
+| P01    | Sreekumar | Nair      | Trivandrum |  60000 | MD     |
+| P02    | Anil      | Kumar     | Kollam     |  45000 | MBBS   |
+| P03    | Divya     | Menon     | Kochi      |  70000 | MD     |
+| P04    | Rahul     | Das       | Calicut    |  52000 | MS     |
+| P05    | Deepa     | Ravi      | Thrissur   |  48000 | MBBS   |
++--------+-----------+-----------+------------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from specialization;
++--------+-------------+
+| phy_id | field       |
++--------+-------------+
+| P01    | Cardiology  |
+| P02    | Neurology   |
+| P03    | Orthopedics |
+| P04    | ENT         |
+| P05    | Dermatology |
++--------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from nurse;
++----------+-------------+-------------+-------+
+| nurse_id | nurse_fname | nurse_lname | shift |
++----------+-------------+-------------+-------+
+| N01      | Arya        | S           | Day   |
+| N02      | Meera       | K           | Night |
+| N03      | Lakshmi     | P           | Day   |
+| N04      | Riya        | M           | Night |
++----------+-------------+-------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from ward;
++---------+-----------+------------+----------+------------+
+| ward_no | ward_name | no_of_beds | nurse_id | phone_no   |
++---------+-----------+------------+----------+------------+
+|     101 | General   |         30 | N01      | 9876543210 |
+|     102 | ICU       |         10 | N02      | 9876543211 |
+|     103 | Cardio    |         25 | N03      | 9876543212 |
+|     104 | Neuro     |         20 | N04      | 9876543213 |
++---------+-----------+------------+----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from patient;
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT02   | Arun      | Raj       |   45 | P02    |     104 | 2026-03-05 |
+| PT03   | Divya     | S         |   30 | P03    |     101 | 2026-03-07 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
+| PT05   | Ravi      | K         |   55 | P04    |     102 | 2026-03-12 |
+| PT06   | Devika    | Nair      |   28 | P05    |     101 | 2026-03-15 |
++--------+-----------+-----------+------+--------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select pat_fname,pat_lname,ward_no from patient;
++-----------+-----------+---------+
+| pat_fname | pat_lname | ward_no |
++-----------+-----------+---------+
+| Dinesh    | Kumar     |     103 |
+| Arun      | Raj       |     104 |
+| Divya     | S         |     101 |
+| Deepak    | Mohan     |     103 |
+| Ravi      | K         |     102 |
+| Devika    | Nair      |     101 |
++-----------+-----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select pat_id,ward_no from patient;
++--------+---------+
+| pat_id | ward_no |
++--------+---------+
+| PT03   |     101 |
+| PT06   |     101 |
+| PT05   |     102 |
+| PT01   |     103 |
+| PT04   |     103 |
+| PT02   |     104 |
++--------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select p.pat_fname,ph.phy_fname from patient p join physician ph on p.phy_id=ph.phy_id;
++-----------+-----------+
+| pat_fname | phy_fname |
++-----------+-----------+
+| Dinesh    | Sreekumar |
+| Deepak    | Sreekumar |
+| Arun      | Anil      |
+| Divya     | Divya     |
+| Ravi      | Rahul     |
+| Devika    | Deepa     |
++-----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select p.* from patient p join physician ph on p.pat_fname like 'D%' and phy_fname='sreekumar';
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT03   | Divya     | S         |   30 | P03    |     101 | 2026-03-07 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
+| PT06   | Devika    | Nair      |   28 | P05    |     101 | 2026-03-15 |
++--------+-----------+-----------+------+--------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select p.* from patient p join physician ph on p.pat_fname like 'D%' and
+ph.phy_fname='sreekumar';
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT03   | Divya     | S         |   30 | P03    |     101 | 2026-03-07 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
+| PT06   | Devika    | Nair      |   28 | P05    |     101 | 2026-03-15 |
++--------+-----------+-----------+------+--------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select p.* from patient p join physician ph on p.pat_fname like 'D%' and ph.phy_fname='Sreekumar';
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT03   | Divya     | S         |   30 | P03    |     101 | 2026-03-07 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
+| PT06   | Devika    | Nair      |   28 | P05    |     101 | 2026-03-15 |
++--------+-----------+-----------+------+--------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select p.* from patient p join physician ph on p.pat_fname like 'D%' and ph.phy_id='P01';
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT03   | Divya     | S         |   30 | P03    |     101 | 2026-03-07 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
+| PT06   | Devika    | Nair      |   28 | P05    |     101 | 2026-03-15 |
++--------+-----------+-----------+------+--------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select p.* from patient p join physician ph on p.phy_id=ph.phy_id where p.pat_fname like 'D%' and ph.phy_fname='Sreekumar';
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
++--------+-----------+-----------+------+--------+---------+------------+
+2 rows in set (0.00 sec)
+
+mysql> desc patient;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| pat_id     | varchar(10) | NO   | PRI | NULL    |       |
+| pat_fname  | varchar(30) | YES  |     | NULL    |       |
+| pat_lname  | varchar(30) | YES  |     | NULL    |       |
+| age        | int         | YES  |     | NULL    |       |
+| phy_id     | varchar(10) | YES  | MUL | NULL    |       |
+| ward_no    | int         | YES  | MUL | NULL    |       |
+| admit_date | date        | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+7 rows in set (0.01 sec)
+
+mysql> insert into patient('PT07','Athira','S',20,'P03',101,'2026-02-25');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''PT07','Athira','S',20,'P03',101,'2026-02-25')' at line 1
+mysql> insert into patient values('PT07','Athira','S',20,'P03',101,'2026-02-25');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select n.* from nurse n join patient p on n.ward_no=p.ward_no;
+ERROR 1054 (42S22): Unknown column 'n.ward_no' in 'on clause'
+mysql> select n.* from nurse n join patient p on p.ward_no=n.ward_no;
+ERROR 1054 (42S22): Unknown column 'n.ward_no' in 'on clause'
+mysql> select n.* from nurse n join patient p on n.ward_no=p.ward_no where p.pat_id='PT07';
+ERROR 1054 (42S22): Unknown column 'n.ward_no' in 'on clause'
+mysql> select n.* from nurse n join ward w on n.nurse_id=w.nurse_id join patient p on w.ward_no=p.ward_no  where p.pat_id='PT07';
++----------+-------------+-------------+-------+
+| nurse_id | nurse_fname | nurse_lname | shift |
++----------+-------------+-------------+-------+
+| N01      | Arya        | S           | Day   |
++----------+-------------+-------------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from physician where salary>50000;
++--------+-----------+-----------+------------+--------+--------+
+| phy_id | phy_fname | phy_lname | address    | salary | degree |
++--------+-----------+-----------+------------+--------+--------+
+| P01    | Sreekumar | Nair      | Trivandrum |  60000 | MD     |
+| P03    | Divya     | Menon     | Kochi      |  70000 | MD     |
+| P04    | Rahul     | Das       | Calicut    |  52000 | MS     |
++--------+-----------+-----------+------------+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select distinct field from specialization;
++-------------+
+| field       |
++-------------+
+| Cardiology  |
+| Neurology   |
+| Orthopedics |
+| ENT         |
+| Dermatology |
++-------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> select p.* from physician p join specialization s on p.phy_id=s.phy_id where length(field)<5;
++--------+-----------+-----------+---------+--------+--------+
+| phy_id | phy_fname | phy_lname | address | salary | degree |
++--------+-----------+-----------+---------+--------+--------+
+| P04    | Rahul     | Das       | Calicut |  52000 | MS     |
++--------+-----------+-----------+---------+--------+--------+
+1 row in set (0.00 sec)
+
+mysql> select phy_fname,phy_lname,salary from physician;
++-----------+-----------+--------+
+| phy_fname | phy_lname | salary |
++-----------+-----------+--------+
+| Sreekumar | Nair      |  60000 |
+| Anil      | Kumar     |  45000 |
+| Divya     | Menon     |  70000 |
+| Rahul     | Das       |  52000 |
+| Deepa     | Ravi      |  48000 |
++-----------+-----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select phy_fname,phy_lname from physician where length(phy_fname)=5;
++-----------+-----------+
+| phy_fname | phy_lname |
++-----------+-----------+
+| Divya     | Menon     |
+| Rahul     | Das       |
+| Deepa     | Ravi      |
++-----------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select s.field from specialization s join physician p on s.phy_id=p.phy_id where p.phy_fname not like 'P%';
++-------------+
+| field       |
++-------------+
+| Cardiology  |
+| Neurology   |
+| Orthopedics |
+| ENT         |
+| Dermatology |
++-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from physician;
++--------+-----------+-----------+------------+--------+--------+
+| phy_id | phy_fname | phy_lname | address    | salary | degree |
++--------+-----------+-----------+------------+--------+--------+
+| P01    | Sreekumar | Nair      | Trivandrum |  60000 | MD     |
+| P02    | Anil      | Kumar     | Kollam     |  45000 | MBBS   |
+| P03    | Divya     | Menon     | Kochi      |  70000 | MD     |
+| P04    | Rahul     | Das       | Calicut    |  52000 | MS     |
+| P05    | Deepa     | Ravi      | Thrissur   |  48000 | MBBS   |
++--------+-----------+-----------+------------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select s.field from specialization s join physician p on s.phy_id=p.phy_id where p.phy_fname not like 'D%';
++------------+
+| field      |
++------------+
+| Cardiology |
+| Neurology  |
+| ENT        |
++------------+
+3 rows in set (0.00 sec)
+
+mysql> select *from nurse;
++----------+-------------+-------------+-------+
+| nurse_id | nurse_fname | nurse_lname | shift |
++----------+-------------+-------------+-------+
+| N01      | Arya        | S           | Day   |
+| N02      | Meera       | K           | Night |
+| N03      | Lakshmi     | P           | Day   |
+| N04      | Riya        | M           | Night |
++----------+-------------+-------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select nurse_fname,shift from nurse;
++-------------+-------+
+| nurse_fname | shift |
++-------------+-------+
+| Arya        | Day   |
+| Meera       | Night |
+| Lakshmi     | Day   |
+| Riya        | Night |
++-------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select p.* from patient p join specialization s on p.phy_id=s.phy_id where p.age>60 and s.field='Cardiology';
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
++--------+-----------+-----------+------+--------+---------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from ward;
++---------+-----------+------------+----------+------------+
+| ward_no | ward_name | no_of_beds | nurse_id | phone_no   |
++---------+-----------+------------+----------+------------+
+|     101 | General   |         30 | N01      | 9876543210 |
+|     102 | ICU       |         10 | N02      | 9876543211 |
+|     103 | Cardio    |         25 | N03      | 9876543212 |
+|     104 | Neuro     |         20 | N04      | 9876543213 |
++---------+-----------+------------+----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select ward_name from ward where no_of_beds>25;
++-----------+
+| ward_name |
++-----------+
+| General   |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select * from ward;
++---------+-----------+------------+----------+------------+
+| ward_no | ward_name | no_of_beds | nurse_id | phone_no   |
++---------+-----------+------------+----------+------------+
+|     101 | General   |         30 | N01      | 9876543210 |
+|     102 | ICU       |         10 | N02      | 9876543211 |
+|     103 | Cardio    |         25 | N03      | 9876543212 |
+|     104 | Neuro     |         20 | N04      | 9876543213 |
++---------+-----------+------------+----------+------------+
+4 rows in set (0.01 sec)
+
+mysql> select * from patient;
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT02   | Arun      | Raj       |   45 | P02    |     104 | 2026-03-05 |
+| PT03   | Divya     | S         |   30 | P03    |     101 | 2026-03-07 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
+| PT05   | Ravi      | K         |   55 | P04    |     102 | 2026-03-12 |
+| PT06   | Devika    | Nair      |   28 | P05    |     101 | 2026-03-15 |
+| PT07   | Athira    | S         |   20 | P03    |     101 | 2026-02-25 |
++--------+-----------+-----------+------+--------+---------+------------+
+7 rows in set (0.01 sec)
+
+mysql> select p.pat_fname,ph.phy_fname,w.ward_name from patient p join physician ph on p.phy_id=ph.phy_id join ward w on p.ward_no=w.ward_no;
++-----------+-----------+-----------+
+| pat_fname | phy_fname | ward_name |
++-----------+-----------+-----------+
+| Divya     | Divya     | General   |
+| Devika    | Deepa     | General   |
+| Athira    | Divya     | General   |
+| Ravi      | Rahul     | ICU       |
+| Dinesh    | Sreekumar | Cardio    |
+| Deepak    | Sreekumar | Cardio    |
+| Arun      | Anil      | Neuro     |
++-----------+-----------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> select ph.physician count(p.pat_id) as Total_no_of_patient from physician ph join patient p on ph.phy_id=p.phy_id group by p.pat_fname; 
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'count(p.pat_id) as Total_no_of_patient from physician ph join patient p on ph.ph' at line 1
+mysql> select ph.physician,count(p.pat_id) as Total_no_of_patient from physician ph join patient p on ph.phy_id=p.phy_id group by p.pat_fname;
+
+ERROR 1054 (42S22): Unknown column 'ph.physician' in 'field list'
+mysql> select ph.phy_fname,count(p.pat_id) as Total_no_of_patient from physician ph join patient p on ph.phy_id=p.phy_id group by p.pat_fname;
+
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'hospital.ph.phy_fname' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select ph.phy_fname,count(p.pat_id) as Total_no_of_patient from physician ph join patient p on ph.phy_id=p.phy_id group by p.pat_id;
++-----------+---------------------+
+| phy_fname | Total_no_of_patient |
++-----------+---------------------+
+| Sreekumar |                   1 |
+| Sreekumar |                   1 |
+| Anil      |                   1 |
+| Divya     |                   1 |
+| Divya     |                   1 |
+| Rahul     |                   1 |
+| Deepa     |                   1 |
++-----------+---------------------+
+7 rows in set (0.00 sec)
+
+mysql> select ph.phy_fname,count(p.pat_id) as Total_no_of_patient from physician ph join patient p on ph.phy_id=p.phy_id group by ph.phy_id;
++-----------+---------------------+
+| phy_fname | Total_no_of_patient |
++-----------+---------------------+
+| Sreekumar |                   2 |
+| Anil      |                   1 |
+| Divya     |                   2 |
+| Rahul     |                   1 |
+| Deepa     |                   1 |
++-----------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from physician;
++--------+-----------+-----------+------------+--------+--------+
+| phy_id | phy_fname | phy_lname | address    | salary | degree |
++--------+-----------+-----------+------------+--------+--------+
+| P01    | Sreekumar | Nair      | Trivandrum |  60000 | MD     |
+| P02    | Anil      | Kumar     | Kollam     |  45000 | MBBS   |
+| P03    | Divya     | Menon     | Kochi      |  70000 | MD     |
+| P04    | Rahul     | Das       | Calicut    |  52000 | MS     |
+| P05    | Deepa     | Ravi      | Thrissur   |  48000 | MBBS   |
++--------+-----------+-----------+------------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from specialization;;
++--------+-------------+
+| phy_id | field       |
++--------+-------------+
+| P01    | Cardiology  |
+| P02    | Neurology   |
+| P03    | Orthopedics |
+| P04    | ENT         |
+| P05    | Dermatology |
++--------+-------------+
+5 rows in set (0.00 sec)
+
+ERROR: 
+No query specified
+
+mysql> select * from nurse;
++----------+-------------+-------------+-------+
+| nurse_id | nurse_fname | nurse_lname | shift |
++----------+-------------+-------------+-------+
+| N01      | Arya        | S           | Day   |
+| N02      | Meera       | K           | Night |
+| N03      | Lakshmi     | P           | Day   |
+| N04      | Riya        | M           | Night |
++----------+-------------+-------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from ward;
++---------+-----------+------------+----------+------------+
+| ward_no | ward_name | no_of_beds | nurse_id | phone_no   |
++---------+-----------+------------+----------+------------+
+|     101 | General   |         30 | N01      | 9876543210 |
+|     102 | ICU       |         10 | N02      | 9876543211 |
+|     103 | Cardio    |         25 | N03      | 9876543212 |
+|     104 | Neuro     |         20 | N04      | 9876543213 |
++---------+-----------+------------+----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from patient;
++--------+-----------+-----------+------+--------+---------+------------+
+| pat_id | pat_fname | pat_lname | age  | phy_id | ward_no | admit_date |
++--------+-----------+-----------+------+--------+---------+------------+
+| PT01   | Dinesh    | Kumar     |   65 | P01    |     103 | 2026-03-01 |
+| PT02   | Arun      | Raj       |   45 | P02    |     104 | 2026-03-05 |
+| PT03   | Divya     | S         |   30 | P03    |     101 | 2026-03-07 |
+| PT04   | Deepak    | Mohan     |   70 | P01    |     103 | 2026-03-10 |
+| PT05   | Ravi      | K         |   55 | P04    |     102 | 2026-03-12 |
+| PT06   | Devika    | Nair      |   28 | P05    |     101 | 2026-03-15 |
+| PT07   | Athira    | S         |   20 | P03    |     101 | 2026-02-25 |
++--------+-----------+-----------+------+--------+---------+------------+
+7 rows in set (0.00 sec)
+
